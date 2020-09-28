@@ -1,0 +1,24 @@
+{
+  "name": "news-explorer-api",
+  "version": "1.0.0",
+  "description": "Backend к дипломному проекту Яндекс.Практикум",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AllaBoo/news-explorer-api.git"
+  },
+  "author": "AllaBoo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AllaBoo/news-explorer-api/issues"
+  },
+  "homepage": "https://github.com/AllaBoo/news-explorer-api#readme",
+  "devDependencies": {
+    "eslint": "^7.10.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.1"
+  }
+}
