@@ -1,7 +1,6 @@
 const Article = require('../models/article');
-const ErrorNotFound = require('../errors/ErrorNotFound');
-const ErrorForbidden = require('../errors/ErrorForbidden');
-const ErrorBadRequest = require('../errors/ErrorBadRequest');
+const { ErrorNotFound, ErrorForbidden, ErrorBadRequest } = require('../errors');
+const messages = require('../errors/messages');
 
 module.exports.getArticles = (req, res, next) => {
   Article.find({})
@@ -21,7 +20,7 @@ module.exports.createArticle = (req, res, next) => {
     .then((article) => res.status(201).send({ data: article }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new ErrorBadRequest(`Данные не прошли проверку: ${err.message}`));
+        next(new ErrorBadRequest(`${Object.values(err.errors).map((error) => error.message).join(', ')}`));
       }
       next(err);
     });
@@ -29,10 +28,10 @@ module.exports.createArticle = (req, res, next) => {
 
 module.exports.deleteArticle = (req, res, next) => {
   Article.findById(req.params.id).select('owner')
-    .orFail(new ErrorNotFound('Нет статьи с таким ID'))
+    .orFail(new ErrorNotFound(messages.articleNotFound))
     .then((article) => {
       if (article.owner.toString() !== req.user._id) {
-        throw new ErrorForbidden('Запрещено удаление статей других пользователей');
+        throw new ErrorForbidden(messages.articleIsNotYour);
       }
       article.remove()
         .then(() => res.send({ message: 'Статья удалена' }))
@@ -40,7 +39,7 @@ module.exports.deleteArticle = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new ErrorBadRequest('Введён некорректный по форме ID статьи'));
+        next(new ErrorBadRequest(messages.articleIdWrong));
       }
       next(err);
     });

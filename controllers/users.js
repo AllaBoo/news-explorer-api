@@ -2,9 +2,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const PasswordValidator = require('password-validator');
 const User = require('../models/user');
-const ErrorNotFound = require('../errors/ErrorNotFound');
-const ErrorBadRequest = require('../errors/ErrorBadRequest');
-const ErrorConflict = require('../errors/ErrorConflict');
+const { ErrorNotFound, ErrorBadRequest, ErrorConflict } = require('../errors');
+const messages = require('../errors/messages');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -42,19 +41,19 @@ module.exports.createUser = (req, res, next) => {
       }))
       .catch((err) => {
         if (err.name === 'ValidationError') {
-          next(new ErrorBadRequest(`Данные не прошли проверку: ${err.message}`));
+          next(new ErrorBadRequest(`${Object.values(err.errors).map((error) => error.message).join(', ')}`));
         }
         if (err.code === 11000) {
-          next(new ErrorConflict('Введённый e-mail уже используются. Авторизуйтесь или введите другой адрес.'));
+          next(new ErrorConflict(messages.emailIsNotUnique));
         }
         next(err);
       });
-  } return new ErrorBadRequest('Пароль должен быть более 6 символов и без пробелов');
+  } return new ErrorBadRequest(messages.passwordIsNodValid);
 };
 
 module.exports.getUser = (req, res, next) => {
   User.findById(req.user._id)
-    .orFail(new ErrorNotFound('Нет пользователя с таким ID'))
+    .orFail(new ErrorNotFound(messages.userNotFound))
     .then((user) => res.status(200).send({
       name: user.name,
       email: user.email,

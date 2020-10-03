@@ -7,7 +7,8 @@ const articles = require('./articles');
 const { createUser, login } = require('../controllers/users');
 const { requestLogger, errorLogger } = require('../middlewares/logger');
 const auth = require('../middlewares/auth');
-const ErrorNotFound = require('../errors/ErrorNotFound');
+const { ErrorNotFound } = require('../errors');
+const messages = require('../errors/messages');
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
@@ -28,7 +29,7 @@ router.post('/signin', celebrate({
 router.use('/users', auth, users);
 router.use('/articles', auth, articles);
 router.use('*', (req, res, next) => {
-  next(new ErrorNotFound('Такой страницы не существует'));
+  next(new ErrorNotFound(messages.pageNotFound));
 });
 
 router.use(errorLogger);
