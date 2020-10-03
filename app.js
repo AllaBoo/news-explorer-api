@@ -7,6 +7,7 @@ const { errors } = require('celebrate');
 const users = require('./routes/users');
 const articles = require('./routes/articles');
 const { createUser, login } = require('./controllers/users');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 const auth = require('./middlewares/auth');
 
 mongoose.connect('mongodb://localhost:27017/news-db', {
@@ -20,7 +21,7 @@ const { PORT = 3000 } = process.env;
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
+app.use(requestLogger);
 app.post('/signup', celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
@@ -37,6 +38,7 @@ app.post('/signin', celebrate({
 app.use(auth);
 app.use('/users', users);
 app.use('/articles', articles);
+app.use(errorLogger);
 app.use(errors());
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
