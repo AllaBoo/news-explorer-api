@@ -3,6 +3,7 @@ const ErrorConflict = require('./ErrorConflict');
 const ErrorForbidden = require('./ErrorForbidden');
 const ErrorNotFound = require('./ErrorNotFound');
 const ErrorUnauthorized = require('./ErrorForbidden');
+const messages = require('./messages');
 
 module.exports = {
   ErrorBadRequest,
@@ -10,4 +11,5 @@ module.exports = {
   ErrorForbidden,
   ErrorNotFound,
   ErrorUnauthorized,
+  messages,
 };
