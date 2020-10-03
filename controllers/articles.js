@@ -1,6 +1,7 @@
 const Article = require('../models/article');
 const ErrorNotFound = require('../errors/ErrorNotFound');
 const ErrorForbidden = require('../errors/ErrorForbidden');
+const ErrorBadRequest = require('../errors/ErrorBadRequest');
 
 module.exports.getArticles = (req, res, next) => {
   Article.find({})
@@ -18,7 +19,12 @@ module.exports.createArticle = (req, res, next) => {
     keyword, title, text, date, source, link, image, owner: req.user._id,
   })
     .then((article) => res.status(201).send({ data: article }))
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new ErrorBadRequest(`Данные не прошли проверку: ${err.message}`));
+      }
+      next(err);
+    });
 };
 
 module.exports.deleteArticle = (req, res, next) => {
@@ -32,5 +38,10 @@ module.exports.deleteArticle = (req, res, next) => {
         .then(() => res.send({ message: 'Статья удалена' }))
         .catch(next);
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new ErrorBadRequest('Введён некорректный по форме ID статьи'));
+      }
+      next(err);
+    });
 };
