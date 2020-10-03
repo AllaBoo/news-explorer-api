@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const { celebrate, Joi } = require('celebrate');
 const { errors } = require('celebrate');
 const users = require('./routes/users');
+const articles = require('./routes/articles');
 const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 
@@ -35,6 +36,7 @@ app.post('/signin', celebrate({
 }), login);
 app.use(auth);
 app.use('/users', users);
+app.use('/articles', articles);
 app.use(errors());
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
