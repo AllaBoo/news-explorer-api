@@ -7,7 +7,7 @@ const { createUser, login } = require('../controllers/users');
 const { requestLogger, errorLogger } = require('../middlewares/logger');
 const auth = require('../middlewares/auth');
 const { ErrorNotFound, messages } = require('../errors');
-const { validateSignIn, validateSignUp } = require('../middlewares/validation');
+const { validateSignUp, validateSignIn } = require('../middlewares/validation');
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));

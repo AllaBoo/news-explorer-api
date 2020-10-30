@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
     uniqueCaseInsensitive: true,
     validate: {
       validator: (link) => validator.isEmail(link),
-      message: 'В поле «email» должна быть ссылка',
+      message: messages.emailIsNodValid,
     },
   },
   password: {
