@@ -10,7 +10,7 @@ const { errorHandler } = require('./middlewares/errorHandler');
 
 const corsOptions = {
   origin: [
-    'news-explorer-praktikum.ru',
+    'https://news-explorer-praktikum.ru',
     'http://localhost:8080',
     'https://allaboo.github.io',
   ],
@@ -21,6 +21,8 @@ const corsOptions = {
     'Content-Type',
     'origin',
     'x-access-token',
+    'authorization',
+    'credentials',
   ],
   credentials: true,
 };
