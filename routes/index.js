@@ -14,7 +14,7 @@ router.use(bodyParser.urlencoded({ extended: false }));
 router.use(requestLogger);
 router.post('/signup', validateSignUp, createUser);
 router.post('/signin', validateSignIn, login);
-router.use('/users', auth, users);
+router.use('/users', users);
 router.use('/articles', auth, articles);
 router.use('*', (req, res, next) => {
   next(new ErrorNotFound(messages.pageNotFound));
