@@ -29,6 +29,14 @@ module.exports.login = (req, res, next) => {
     .catch(next);
 };
 
+module.exports.logout = (req, res, next) => {
+  try {
+    return res.clearCookie('jwt').end();
+  } catch (err) {
+    return next();
+  }
+};
+
 module.exports.createUser = (req, res, next) => {
   if (passwordSchema.validate(req.body.password)) {
     bcrypt.hash(req.body.password, 10)
