@@ -3,8 +3,7 @@ const { ErrorNotFound, ErrorForbidden, ErrorBadRequest } = require('../errors');
 const messages = require('../errors/messages');
 
 module.exports.getArticles = (req, res, next) => {
-  Article.find({})
-    .populate('user')
+  Article.find({ owner: req.user._id })
     .then((articles) => { res.send({ data: articles }); })
     .catch(next);
 };
